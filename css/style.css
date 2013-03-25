@@ -1,0 +1,78 @@
+html, .b-page{height: 100%;}
+
+.b-page{
+    margin: 0;
+    padding: 0;
+    background: #000;
+    position: relative;
+}
+
+.b-slider{
+    margin: 0;
+    height: 100%;
+    overflow: hidden;
+    text-align: center;
+    position: relative;
+}
+
+.b-slider__img{
+    max-width: 100%;
+    max-height: 100%;
+    position: relative;
+}
+
+.b-slider-nav{
+    top: 50%;
+    width: 92px;
+    height: 91px;
+    display: block;
+    margin-top: -46px;
+    position: absolute;
+    background: url("../img/prev.png") no-repeat;
+}
+
+.b-slider-nav-prev{
+    left: 20px;
+    background: url("../img/prev.png") no-repeat;
+}
+
+.b-slider-nav-next{
+    right: 20px;
+    background: url("../img/next.png") no-repeat;
+}
+
+.b-slider-thumbs__wrap{
+    bottom: 0;
+    left: 40px;
+    right: 40px;
+    height: 95px;
+    position: fixed;
+    overflow: hidden;
+}
+
+.b-slider-thumbs{
+    margin: 0;
+    padding: 0;
+    background: rgba(0,0,0, 0.5);
+    white-space: nowrap;
+}
+
+.b-slider-thumbs__item{
+    width: 75px;
+    height: 75px;
+    padding: 10px;
+    overflow: hidden;
+    list-style: none;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.b-slider-thumbs__item:hover{
+    padding: 6px;
+    border: 4px solid #0998ac;
+}
+
+.b-slider-thumbs__img{
+    width: 100%;
+    height: 100%;
+}

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gallery</title>
+    <link rel="stylesheet" href="css/style.css"/>
+    <script type="text/javascript" src="js/jquery.js"></script>
+</head>
+<body class="b-page">
+    <div class="b-slider">
+        <img class="b-slider__img" src="img/0_9b841_3f7eacd4_orig.jpg" alt="Cat"/>
+        <a class="b-slider-nav b-slider-nav-prev" href="/"></a>
+        <a class="b-slider-nav b-slider-nav-next" href="/"></a>
+        <div class="b-slider-thumbs__wrap">
+            <ul class="b-slider-thumbs">
+                <li class="b-slider-thumbs__item">
+                    <img class="b-slider-thumbs__img" src="img/0_9b841_3f7eacd4_orig.jpg" alt="Cat"/>
+                </li>
+                <li class="b-slider-thumbs__item">
+                    <img class="b-slider-thumbs__img" src="img/0_9b841_3f7eacd4_orig.jpg" alt="Cat"/>
+                </li>
+                <li class="b-slider-thumbs__item">
+                    <img class="b-slider-thumbs__img" src="img/0_9b841_3f7eacd4_orig.jpg" alt="Cat"/>
+                </li>
+                <li class="b-slider-thumbs__item">
+                    <img class="b-slider-thumbs__img" src="img/0_9b841_3f7eacd4_orig.jpg" alt="Cat"/>
+                </li>
+                <li class="b-slider-thumbs__item">
+                    <img class="b-slider-thumbs__img" src="img/0_9b841_3f7eacd4_orig.jpg" alt="Cat"/>
+                </li>
+                <li class="b-slider-thumbs__item">
+                    <img class="b-slider-thumbs__img" src="img/0_9b841_3f7eacd4_orig.jpg" alt="Cat"/>
+                </li>
+                <li class="b-slider-thumbs__item">
+                    <img class="b-slider-thumbs__img" src="img/0_9b841_3f7eacd4_orig.jpg" alt="Cat"/>
+                </li>
+                <li class="b-slider-thumbs__item">
+                    <img class="b-slider-thumbs__img" src="img/0_9b841_3f7eacd4_orig.jpg" alt="Cat"/>
+                </li>
+                <li class="b-slider-thumbs__item">
+                    <img class="b-slider-thumbs__img" src="img/0_9b841_3f7eacd4_orig.jpg" alt="Cat"/>
+                </li>
+                <li class="b-slider-thumbs__item">
+                    <img class="b-slider-thumbs__img" src="img/0_9b841_3f7eacd4_orig.jpg" alt="Cat"/>
+                </li>
+                <li class="b-slider-thumbs__item">
+                    <img class="b-slider-thumbs__img" src="img/0_9b841_3f7eacd4_orig.jpg" alt="Cat"/>
+                </li>
+                <li class="b-slider-thumbs__item">
+                    <img class="b-slider-thumbs__img" src="img/0_9b841_3f7eacd4_orig.jpg" alt="Cat"/>
+                </li>
+                <li class="b-slider-thumbs__item">
+                    <img class="b-slider-thumbs__img" src="img/0_9b841_3f7eacd4_orig.jpg" alt="Cat"/>
+                </li>
+                <li class="b-slider-thumbs__item">
+                    <img class="b-slider-thumbs__img" src="img/0_9b841_3f7eacd4_orig.jpg" alt="Cat"/>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <script type="text/javascript">
+        function imagePosition(){
+            var galImage = $('.b-slider__img'),
+                    galHeight = galImage.height(),
+                    sliderHeight = $('.b-slider').height(),
+                    topImage = (sliderHeight - galHeight) / 2;
+
+                galImage.css('top', topImage);
+
+        }
+
+        $(window).load(function(){
+            imagePosition();
+        });
+
+        $(window).resize(function(){
+            imagePosition();
+        });
+    </script>
+</body>
+</html>
