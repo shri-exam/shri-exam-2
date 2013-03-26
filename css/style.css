@@ -9,10 +9,23 @@ html, .b-page{height: 100%;}
 
 .b-slider{
     margin: 0;
+    padding: 0;
     height: 100%;
     overflow: hidden;
     text-align: center;
     position: relative;
+    white-space: nowrap;
+}
+
+.b-slider__cur{
+    width: 100%;
+}
+
+.b-slider__item{
+    line-height: 100%;
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
 }
 
 .b-slider__img{
@@ -21,27 +34,27 @@ html, .b-page{height: 100%;}
     position: relative;
 }
 
-.b-slider-nav{
+.b-nav{
     top: 50%;
     width: 92px;
     height: 91px;
-    display: block;
+    display: none;
     margin-top: -46px;
     position: absolute;
     background: url("../img/prev.png") no-repeat;
 }
 
-.b-slider-nav-prev{
+.b-nav-prev{
     left: 20px;
     background: url("../img/prev.png") no-repeat;
 }
 
-.b-slider-nav-next{
+.b-nav-next{
     right: 20px;
     background: url("../img/next.png") no-repeat;
 }
 
-.b-slider-thumbs__wrap{
+.b-thumbs__wrap{
     left: 0;
     right: 0;
     bottom: 0;
@@ -51,39 +64,31 @@ html, .b-page{height: 100%;}
     background: rgba(0,0,0, 0.5);
 }
 
-.b-slider-thumbs{
+.b-thumbs{
     margin: 0;
     padding: 0;
     overflow: hidden;
     white-space: nowrap;
 }
 
-.b-slider-thumbs__item{
+.b-thumbs__item{
     width: 75px;
     height: 75px;
     padding: 10px;
     overflow: hidden;
     list-style: none;
-    cursor: pointer;
-    position: relative;
     display: inline-block;
 }
 
-.b-slider-thumbs__item:hover{
+.b-thumbs__item:hover{
     padding: 6px;
     border: 4px solid #0998ac;
 }
 
-.b-slider-thumbs__item-a{
-    width: 75px;
-    height: 75px;
+.b-thumbs__item-a{
     display: block;
-    overflow: hidden;
-    position: relative;
 }
 
-.b-slider-thumbs__img{
-    top: 0;
-    left: 0;
-    position: absolute;
+.b-thumbs__img{
+
 }

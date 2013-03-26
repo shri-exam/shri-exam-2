@@ -6,46 +6,62 @@
     <script type="text/javascript" src="js/jquery.js"></script>
 </head>
 <body class="b-page">
-    <div class="b-slider">
-        <img class="b-slider__img" src="img/0_9b841_3f7eacd4_orig.jpg" alt="Cat"/>
-        <a class="b-slider-nav b-slider-nav-prev" href="/"></a>
-        <a class="b-slider-nav b-slider-nav-next" href="/"></a>
-        <div class="b-slider-thumbs__wrap">
-            <ul class="b-slider-thumbs">
-            </ul>
-        </div>
+    <ul class="b-slider">
+        <li class="b-slider__item b-slider__prev"></li>
+        <li class="b-slider__item b-slider__cur"></li>
+        <li class="b-slider__item b-slider__next"></li>
+    </ul>
+    <a class="b-nav b-nav-prev" href="/"></a>
+    <a class="b-nav b-nav-next" href="/"></a>
+    <div class="b-thumbs__wrap">
+        <ul class="b-thumbs">
+        </ul>
     </div>
     <script type="text/javascript">
-        function imagePosition(){
-            var galImage = $('.b-slider__img'),
-                    galHeight = galImage.height(),
-                    sliderHeight = $('.b-slider').height(),
-                    topImage = (sliderHeight - galHeight) / 2;
-
-                galImage.css('top', topImage);
-        }
+//        function imagePosition(){
+//            var galImage = $('.b-slider__img'),
+//                    galHeight = galImage.height(),
+//                    sliderHeight = $('.b-slider').height(),
+//                    topImage = (sliderHeight - galHeight) / 2;
+//
+//                galImage.css('top', topImage);
+//        }
 
         function getData(){
             var apiUrl = 'http://api-fotki.yandex.ru/api/users/aig1001/album/63684/photos/created/?format=json&callback=?';
             $.getJSON(apiUrl, function(data) {
                 getThumbs(data);
+                getSliderImage(data)
             });
         }
 
         function getThumbs(data){
             $(data.entries).each(function(){
-            var link = $(this)[0].img.XXS.href;
-$('<li class="b-slider-thumbs__item"><a class="b-slider-thumbs__item-a" href="'+link+'"><img class="b-slider-thumbs__img" src="'+link+'"</a></li>').appendTo('.b-slider-thumbs');
+            var thumbImage = $(this)[0].img.XXS.href,
+                bigImage = $(this)[0].img.L.href;
+$('<li class="b-thumbs__item"><a class="b-thumbs__item-a" href="'+bigImage+'"><img class="b-thumbs__img" src="'+thumbImage+'"</a></li>').appendTo('.b-thumbs');
             });
         }
 
+        function getSliderImage(data){
+            $('<img/>', {
+                class: 'b-slider__img',
+                src: $(data.entries)[0].img.L.href
+            }).prependTo('.b-slider__cur');
+            $('<img/>', {
+                class: 'b-slider__img',
+                src: $(data.entries)[1].img.L.href
+            }).prependTo('.b-slider__next');
+        }
+
         $(window).load(function(){
-            imagePosition();
             getData();
+            $(document).hover(function(){
+                $('.b-nav').toggle();
+            });
         });
 
         $(window).resize(function(){
-            imagePosition();
         });
     </script>
 </body>
