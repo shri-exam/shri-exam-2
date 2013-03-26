@@ -74,11 +74,15 @@ html, .b-page{height: 100%;}
 }
 
 .b-slider-thumbs__item-a{
-    overflow: hidden;
+    width: 75px;
+    height: 75px;
     display: block;
-    height: 100%;
+    overflow: hidden;
+    position: relative;
 }
 
 .b-slider-thumbs__img{
-    height: 100%;
+    top: 0;
+    left: 0;
+    position: absolute;
 }
