@@ -38,7 +38,7 @@ html, .b-page{height: 100%;}
     top: 50%;
     width: 92px;
     height: 91px;
-    display: none;
+    display: block;
     margin-top: -46px;
     position: absolute;
     background: url("../img/prev.png") no-repeat;

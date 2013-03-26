@@ -14,51 +14,33 @@
     <a class="b-nav b-nav-prev" href="/"></a>
     <a class="b-nav b-nav-next" href="/"></a>
     <div class="b-thumbs__wrap">
-        <ul class="b-thumbs">
-        </ul>
+        <ul class="b-thumbs"></ul>
     </div>
     <script type="text/javascript">
-//        function imagePosition(){
-//            var galImage = $('.b-slider__img'),
-//                    galHeight = galImage.height(),
-//                    sliderHeight = $('.b-slider').height(),
-//                    topImage = (sliderHeight - galHeight) / 2;
-//
-//                galImage.css('top', topImage);
-//        }
 
         function getData(){
             var apiUrl = 'http://api-fotki.yandex.ru/api/users/aig1001/album/63684/photos/created/?format=json&callback=?';
             $.getJSON(apiUrl, function(data) {
                 getThumbs(data);
-                getSliderImage(data)
+                console.log(data);
             });
         }
 
         function getThumbs(data){
             $(data.entries).each(function(){
-            var thumbImage = $(this)[0].img.XXS.href,
-                bigImage = $(this)[0].img.L.href;
-$('<li class="b-thumbs__item"><a class="b-thumbs__item-a" href="'+bigImage+'"><img class="b-thumbs__img" src="'+thumbImage+'"</a></li>').appendTo('.b-thumbs');
-            });
-        }
+            var thumbImgLink = $(this)[0].img.XXS.href,
+                bigImage = $(this)[0].img.L.href,
+                thumbsWrap = $('.b-thumbs'),
+                thumbsItem = $('<li class="b-thumbs__item"></li>'),
+                thumbsItemA = $('<a class="b-thumbs__item-a" href="'+bigImage+'"></a>'),
+                thumbsImg = $('<img class="b-thumbs__img" src="'+thumbImgLink+'"/>');
 
-        function getSliderImage(data){
-            $('<img/>', {
-                class: 'b-slider__img',
-                src: $(data.entries)[0].img.L.href
-            }).prependTo('.b-slider__cur');
-            $('<img/>', {
-                class: 'b-slider__img',
-                src: $(data.entries)[1].img.L.href
-            }).prependTo('.b-slider__next');
+                thumbsItem.append(thumbsItemA.append(thumbsImg)).appendTo(thumbsWrap);
+            });
         }
 
         $(window).load(function(){
             getData();
-            $(document).hover(function(){
-                $('.b-nav').toggle();
-            });
         });
 
         $(window).resize(function(){
