@@ -12,106 +12,6 @@
         <a class="b-slider-nav b-slider-nav-next" href="/"></a>
         <div class="b-slider-thumbs__wrap">
             <ul class="b-slider-thumbs">
-                <li class="b-slider-thumbs__item">
-                    <a class="b-slider-thumbs__item-a" href="/">
-                        <img class="b-slider-thumbs__img" src="img/thumb1.jpg" alt="Cat"/>
-                    </a>
-                </li>
-                <li class="b-slider-thumbs__item">
-                    <a class="b-slider-thumbs__item-a" href="/">
-                        <img class="b-slider-thumbs__img" src="img/thumb2.jpg" alt="Cat"/>
-                    </a>
-                </li>
-                <li class="b-slider-thumbs__item">
-                    <a class="b-slider-thumbs__item-a" href="/">
-                        <img class="b-slider-thumbs__img" src="img/thumb3.jpg" alt="Cat"/>
-                    </a>
-                </li>
-                <li class="b-slider-thumbs__item">
-                    <a class="b-slider-thumbs__item-a" href="/">
-                        <img class="b-slider-thumbs__img" src="img/thumb4.jpg" alt="Cat"/>
-                    </a>
-                </li>
-                <li class="b-slider-thumbs__item">
-                    <a class="b-slider-thumbs__item-a" href="/">
-                        <img class="b-slider-thumbs__img" src="img/thumb1.jpg" alt="Cat"/>
-                    </a>
-                </li>
-                <li class="b-slider-thumbs__item">
-                    <a class="b-slider-thumbs__item-a" href="/">
-                        <img class="b-slider-thumbs__img" src="img/thumb2.jpg" alt="Cat"/>
-                    </a>
-                </li>
-                <li class="b-slider-thumbs__item">
-                    <a class="b-slider-thumbs__item-a" href="/">
-                        <img class="b-slider-thumbs__img" src="img/thumb3.jpg" alt="Cat"/>
-                    </a>
-                </li>
-                <li class="b-slider-thumbs__item">
-                    <a class="b-slider-thumbs__item-a" href="/">
-                        <img class="b-slider-thumbs__img" src="img/thumb4.jpg" alt="Cat"/>
-                    </a>
-                </li>
-                <li class="b-slider-thumbs__item">
-                    <a class="b-slider-thumbs__item-a" href="/">
-                        <img class="b-slider-thumbs__img" src="img/thumb1.jpg" alt="Cat"/>
-                    </a>
-                </li>
-                <li class="b-slider-thumbs__item">
-                    <a class="b-slider-thumbs__item-a" href="/">
-                        <img class="b-slider-thumbs__img" src="img/thumb2.jpg" alt="Cat"/>
-                    </a>
-                </li>
-                <li class="b-slider-thumbs__item">
-                    <a class="b-slider-thumbs__item-a" href="/">
-                        <img class="b-slider-thumbs__img" src="img/thumb3.jpg" alt="Cat"/>
-                    </a>
-                </li>
-                <li class="b-slider-thumbs__item">
-                    <a class="b-slider-thumbs__item-a" href="/">
-                        <img class="b-slider-thumbs__img" src="img/thumb4.jpg" alt="Cat"/>
-                    </a>
-                </li>
-                <li class="b-slider-thumbs__item">
-                    <a class="b-slider-thumbs__item-a" href="/">
-                        <img class="b-slider-thumbs__img" src="img/thumb1.jpg" alt="Cat"/>
-                    </a>
-                </li>
-                <li class="b-slider-thumbs__item">
-                    <a class="b-slider-thumbs__item-a" href="/">
-                        <img class="b-slider-thumbs__img" src="img/thumb2.jpg" alt="Cat"/>
-                    </a>
-                </li>
-                <li class="b-slider-thumbs__item">
-                    <a class="b-slider-thumbs__item-a" href="/">
-                        <img class="b-slider-thumbs__img" src="img/thumb3.jpg" alt="Cat"/>
-                    </a>
-                </li>
-                <li class="b-slider-thumbs__item">
-                    <a class="b-slider-thumbs__item-a" href="/">
-                        <img class="b-slider-thumbs__img" src="img/thumb4.jpg" alt="Cat"/>
-                    </a>
-                </li>
-                <li class="b-slider-thumbs__item">
-                    <a class="b-slider-thumbs__item-a" href="/">
-                        <img class="b-slider-thumbs__img" src="img/thumb1.jpg" alt="Cat"/>
-                    </a>
-                </li>
-                <li class="b-slider-thumbs__item">
-                    <a class="b-slider-thumbs__item-a" href="/">
-                        <img class="b-slider-thumbs__img" src="img/thumb2.jpg" alt="Cat"/>
-                    </a>
-                </li>
-                <li class="b-slider-thumbs__item">
-                    <a class="b-slider-thumbs__item-a" href="/">
-                        <img class="b-slider-thumbs__img" src="img/thumb3.jpg" alt="Cat"/>
-                    </a>
-                </li>
-                <li class="b-slider-thumbs__item">
-                    <a class="b-slider-thumbs__item-a" href="/">
-                        <img class="b-slider-thumbs__img" src="img/thumb4.jpg" alt="Cat"/>
-                    </a>
-                </li>
             </ul>
         </div>
     </div>
@@ -144,6 +44,16 @@
             });
         }
 
+        function getImages(){
+            var apiUrl = 'http://api-fotki.yandex.ru/api/users/aig1001/album/63684/photos/created;2013-03-20T06:13:20Z/?format=json&callback=?';
+            $.getJSON(apiUrl, function(data) {
+                $(data.entries).each(function(){
+                    var link = $(this)[0].img.XXS.href;
+$('<li class="b-slider-thumbs__item"><a class="b-slider-thumbs__item-a" href="'+link+'"><img class="b-slider-thumbs__img" src="'+link+'"</a></li>').appendTo('.b-slider-thumbs');
+                });
+            });
+        }
+
         $(window).load(function(){
             imagePosition();
             thumbSizer();
@@ -151,6 +61,10 @@
 
         $(window).resize(function(){
             imagePosition();
+        });
+
+        $(function(){
+            getImages();
         });
     </script>
 </body>
