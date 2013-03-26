@@ -42,18 +42,19 @@ html, .b-page{height: 100%;}
 }
 
 .b-slider-thumbs__wrap{
+    left: 0;
+    right: 0;
     bottom: 0;
-    left: 40px;
-    right: 40px;
     height: 95px;
     position: fixed;
-    overflow: hidden;
+    padding: 0 40px;
+    background: rgba(0,0,0, 0.5);
 }
 
 .b-slider-thumbs{
     margin: 0;
     padding: 0;
-    background: rgba(0,0,0, 0.5);
+    overflow: hidden;
     white-space: nowrap;
 }
 
