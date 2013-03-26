@@ -64,6 +64,7 @@ html, .b-page{height: 100%;}
     overflow: hidden;
     list-style: none;
     cursor: pointer;
+    position: relative;
     display: inline-block;
 }
 
@@ -72,7 +73,12 @@ html, .b-page{height: 100%;}
     border: 4px solid #0998ac;
 }
 
+.b-slider-thumbs__item-a{
+    overflow: hidden;
+    display: block;
+    height: 100%;
+}
+
 .b-slider-thumbs__img{
-    width: 100%;
     height: 100%;
 }
