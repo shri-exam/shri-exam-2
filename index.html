@@ -25,46 +25,27 @@
                 galImage.css('top', topImage);
         }
 
-        function thumbSizer(){
-            var thumbImg = $('.b-slider-thumbs__img'),
-                fixedSize = 75;
-
-            thumbImg.each(function(){
-                if($(this).height() < fixedSize){
-
-                    $(this).css('height', fixedSize);
-                    $(this).css('left', - ($(this).width() - fixedSize) / 2);
-
-                }else if($(this).width() < fixedSize){
-
-                    $(this).css('width', fixedSize);
-                    $(this).css('top', - ($(this).height() - fixedSize) / 2);
-
-                }
+        function getData(){
+            var apiUrl = 'http://api-fotki.yandex.ru/api/users/aig1001/album/63684/photos/created/?format=json&callback=?';
+            $.getJSON(apiUrl, function(data) {
+                getThumbs(data);
             });
         }
 
-        function getImages(){
-            var apiUrl = 'http://api-fotki.yandex.ru/api/users/aig1001/album/63684/photos/created;2013-03-20T06:13:20Z/?format=json&callback=?';
-            $.getJSON(apiUrl, function(data) {
-                $(data.entries).each(function(){
-                    var link = $(this)[0].img.XXS.href;
+        function getThumbs(data){
+            $(data.entries).each(function(){
+            var link = $(this)[0].img.XXS.href;
 $('<li class="b-slider-thumbs__item"><a class="b-slider-thumbs__item-a" href="'+link+'"><img class="b-slider-thumbs__img" src="'+link+'"</a></li>').appendTo('.b-slider-thumbs');
-                });
             });
         }
 
         $(window).load(function(){
             imagePosition();
-            thumbSizer();
+            getData();
         });
 
         $(window).resize(function(){
             imagePosition();
-        });
-
-        $(function(){
-            getImages();
         });
     </script>
 </body>
