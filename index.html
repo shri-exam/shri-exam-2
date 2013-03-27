@@ -6,44 +6,79 @@
     <script type="text/javascript" src="js/jquery.js"></script>
 </head>
 <body class="b-page">
-    <ul class="b-slider">
-        <li class="b-slider__item b-slider__prev"></li>
-        <li class="b-slider__item b-slider__cur"></li>
-        <li class="b-slider__item b-slider__next"></li>
-    </ul>
-    <a class="b-nav b-nav-prev" href="/"></a>
-    <a class="b-nav b-nav-next" href="/"></a>
-    <div class="b-thumbs__wrap">
-        <ul class="b-thumbs"></ul>
+    <div class="b-slider__wrap">
+        <ul class="b-slider"></ul>
+    </div>
+    <i class="b-nav b-nav-prev" onclick="prevImg()"></i>
+    <i class="b-nav b-nav-next" onclick="nextImg()"></i>
+    <div class="b-thumbs__bg">
+        <div class="b-thumbs__wrap">
+            <ul class="b-thumbs"></ul>
+        </div>
     </div>
     <script type="text/javascript">
 
         function getData(){
             var apiUrl = 'http://api-fotki.yandex.ru/api/users/aig1001/album/63684/photos/created/?format=json&callback=?';
             $.getJSON(apiUrl, function(data) {
-                getThumbs(data);
-                console.log(data);
+                imagesPreload(data.entries, 0, 20);
+                takeFirstAndSecondImage(data.entries);
             });
         }
 
-        function getThumbs(data){
-            $(data.entries).each(function(){
-            var thumbImgLink = $(this)[0].img.XXS.href,
-                bigImage = $(this)[0].img.L.href,
-                thumbsWrap = $('.b-thumbs'),
-                thumbsItem = $('<li class="b-thumbs__item"></li>'),
-                thumbsItemA = $('<a class="b-thumbs__item-a" href="'+bigImage+'"></a>'),
-                thumbsImg = $('<img class="b-thumbs__img" src="'+thumbImgLink+'"/>');
+        function imagesPreload(data, from, to){
+            for (var i=from;i<to;i++)
+            {
+                if(data[i]){
+                    var thumbImgLink = data[i].img.XXS.href,
+                            bigImage = data[i].img.L.href,
+                            thumbsWrap = $('.b-thumbs'),
+                            thumbsItem = $('<li class="b-thumbs__item"/>'),
+                            thumbsItemPrev = $('.b-thumbs__item').last(),
+//                            thumbsItemA = $('<a class="b-thumbs__item-a" href="'+bigImage+'"></a>'),
+                            thumbsImg = $('<img class="b-thumbs__img" src="'+thumbImgLink+'"/>');
 
-                thumbsItem.append(thumbsItemA.append(thumbsImg)).appendTo(thumbsWrap);
-            });
+                    thumbsItem.append(thumbsImg).appendTo(thumbsWrap).data("curInfo", { number: i, curImgSrc: bigImage });
+                    if(thumbsItemPrev.length > 0){
+                        thumbsItemPrev.data("nextInfo", { nextImgSrc: bigImage });
+                    }
+                }
+            }
+        }
+
+        function takeFirstAndSecondImage(data){
+            var firstImgLink = data[0].img.L.href,
+                secondImgLink = data[1].img.L.href;
+
+            $('.b-thumbs__item').first().addClass('b-thumbs__item-cur');
+
+            $('<li class="b-slider__item" style="width:'+$(document).width()+'px;"><img class="b-slider__item-img" src="'+firstImgLink+'"/></li>').appendTo('.b-slider');
+            $('<li class="b-slider__item" style="width:'+$(document).width()+'px;"><img class="b-slider__item-img" src="'+secondImgLink+'"/></li>').appendTo('.b-slider');
+        }
+
+        function nextImg(){
+            var nextImgLink = $('.b-thumbs__item-cur').next().data('nextInfo').nextImgSrc;
+            $('.b-thumbs__item-cur').removeClass('b-thumbs__item-cur').next().addClass('b-thumbs__item-cur');
+            $('.b-slider').animate({left:"-=+"+$(document).width()+"px"}, 500);
+            $('<li class="b-slider__item" style="width:'+$(document).width()+'px;"><img class="b-slider__item-img" src="'+nextImgLink+'"/></li>').appendTo('.b-slider');
+        }
+
+        function prevImg(){
+            $('.b-thumbs__item-cur').removeClass('b-thumbs__item-cur').prev().addClass('b-thumbs__item-cur');
+            $('.b-slider').animate({left:"+="+$(document).width()+"px"}, 500);
+        }
+
+        function centerCurImg(){
+            $('.b-slider__item').css('width', $(document).width());
         }
 
         $(window).load(function(){
             getData();
+            centerCurImg();
         });
 
         $(window).resize(function(){
+            centerCurImg();
         });
     </script>
 </body>

@@ -7,31 +7,39 @@ html, .b-page{height: 100%;}
     position: relative;
 }
 
+.b-slider__wrap{
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
 .b-slider{
+    left: 0;
     margin: 0;
     padding: 0;
     height: 100%;
     overflow: hidden;
     text-align: center;
-    position: relative;
+    position: absolute;
     white-space: nowrap;
 }
 
-.b-slider__cur{
-    width: 100%;
-}
-
 .b-slider__item{
-    line-height: 100%;
+    width: 100%;
+    text-align: center;
     position: relative;
     display: inline-block;
     vertical-align: middle;
 }
 
-.b-slider__img{
+.b-slider__item img{
     max-width: 100%;
     max-height: 100%;
-    position: relative;
+}
+
+.b-slider__cur{
+
 }
 
 .b-nav{
@@ -41,7 +49,6 @@ html, .b-page{height: 100%;}
     display: block;
     margin-top: -46px;
     position: absolute;
-    background: url("../img/prev.png") no-repeat;
 }
 
 .b-nav-prev{
@@ -54,7 +61,7 @@ html, .b-page{height: 100%;}
     background: url("../img/next.png") no-repeat;
 }
 
-.b-thumbs__wrap{
+.b-thumbs__bg{
     left: 0;
     right: 0;
     bottom: 0;
@@ -64,10 +71,16 @@ html, .b-page{height: 100%;}
     background: rgba(0,0,0, 0.5);
 }
 
+.b-thumbs__wrap{
+    overflow: hidden;
+    position: relative;
+}
+
 .b-thumbs{
+    left: 0;
     margin: 0;
     padding: 0;
-    overflow: hidden;
+    position: relative;
     white-space: nowrap;
 }
 
@@ -77,10 +90,11 @@ html, .b-page{height: 100%;}
     padding: 10px;
     overflow: hidden;
     list-style: none;
+    cursor: pointer;
     display: inline-block;
 }
 
-.b-thumbs__item:hover{
+.b-thumbs__item-cur{
     padding: 6px;
     border: 4px solid #0998ac;
 }
