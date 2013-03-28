@@ -95,9 +95,10 @@ html, .b-page{height: 100%;}
     width: 75px;
     height: 75px;
     padding: 10px;
+    cursor: pointer;
     overflow: hidden;
     list-style: none;
-    cursor: pointer;
+    vertical-align: top;
     display: inline-block;
 }
 
