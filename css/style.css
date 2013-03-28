@@ -54,6 +54,7 @@ html, .b-page{height: 100%;}
     width: 92px;
     height: 91px;
     display: block;
+    cursor: pointer;
     margin-top: -46px;
     position: absolute;
 }

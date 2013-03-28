@@ -13,14 +13,14 @@
     <i class="b-nav b-nav-next" onclick="nextImg()"></i>
     <div class="b-thumbs__bg">
         <div class="b-thumbs__wrap">
-            <ul class="b-thumbs">
-            </ul>
+            <ul class="b-thumbs"></ul>
         </div>
     </div>
     <script type="text/javascript">
         var jsonData,
             imagesData,
-            dWidth = $(document).width();
+            dWidth = $(document).width(),
+            slider = $('.b-slider');
 
         function getData(){
             var apiUrl = 'http://api-fotki.yandex.ru/api/users/aig1001/album/63684/photos/created/?format=json&callback=?';
@@ -70,54 +70,72 @@
                     firstImgAlt = imagesData[1].title,
                     sliderItem = $('<li class="b-slider__item" />');
 
-            $('<li class="b-slider__item" style="width:'+dWidth+'px;"><img class="b-slider__item-img" src="'+firstImgLink+'"/></li>').appendTo('.b-slider');
+            $('<li class="b-slider__item" style="width:'+dWidth+'px;"><img class="b-slider__item-img" src="'+firstImgLink+'"/></li>').appendTo(slider);
         }
 
-        function nextImg(){
-            var nextImgLink = $('.b-thumbs__item-cur').data('nextInfo').nextImgSrc;
+        function nextImg(nextImgLink){
+            if($('.b-thumbs__item-cur').is(':not(:last-child)') != 0 && slider.position().left === 0){
 
-            $('.b-thumbs__item-cur').removeClass('b-thumbs__item-cur').next().addClass('b-thumbs__item-cur');
+                nextImgLink = nextImgLink || $('.b-thumbs__item-cur').data('nextInfo').nextImgSrc;
 
-            $('.b-slider').animate({left:"-="+dWidth+"px"}, 500, function() {
-                    $('.b-slider').css('left', 0).children().first().remove();
-            });
+                $('.b-thumbs__item-cur').removeClass('b-thumbs__item-cur').next().addClass('b-thumbs__item-cur');
 
-            $('<li class="b-slider__item" style="width:'+dWidth+'px;"><img class="b-slider__item-img" src="'+nextImgLink+'"/></li>').appendTo('.b-slider');
+                slider.animate({left:"-="+dWidth+"px"}, 500, function() {
+                        slider.css('left', 0).children().first().remove();
+                });
+
+                $('<li class="b-slider__item" style="width:'+dWidth+'px;"><img class="b-slider__item-img" src="'+nextImgLink+'"/></li>').appendTo(slider);
+            }
         }
 
-        function prevImg(){
-            if($('.b-thumbs__item-cur').index() != 0){
-                var prevImage = $('.b-thumbs__item-cur').prev().data('curInfo').curImgSrc;
+        function prevImg(prevImgLink){
+            if($('.b-thumbs__item-cur').is(':not(:first-child)') != 0 && slider.position().left === 0){
+
+                prevImgLink = prevImgLink || $('.b-thumbs__item-cur').prev().data('curInfo').curImgSrc;
+
                 $('.b-thumbs__item-cur').removeClass('b-thumbs__item-cur').prev().addClass('b-thumbs__item-cur');
 
-                $('.b-slider').css('left', -dWidth).prepend('<li class="b-slider__item" style="width:'+dWidth+'px;"><img class="b-slider__item-img" src="'+prevImage+'"/></li>');
+                slider.css('left', -dWidth).prepend('<li class="b-slider__item" style="width:'+dWidth+'px;"><img class="b-slider__item-img" src="'+prevImgLink+'"/></li>');
 
-                $('.b-slider').animate({left:"+="+dWidth+"px"}, 500, function(){
-                    $('.b-slider').css('left', 0).children().last().remove();
+                slider.animate({left:"+="+dWidth+"px"}, 500, function(){
+                    slider.css('left', 0).children().last().remove();
                 });
             }
         }
 
-        function takeImage(){
+        function thumbImg(thumb){
+            if(slider.position().left === 0){
+                var imgSrc = thumb.data('curInfo').curImgSrc;
 
+                thumb.addClass('b-thumbs__item-cur').siblings().removeClass('b-thumbs__item-cur');
+
+                slider.css('left', -dWidth).prepend('<li class="b-slider__item" style="width:'+dWidth+'px;"><img class="b-slider__item-img" src="'+imgSrc+'"/></li>');
+
+                slider.animate({left:"+="+dWidth+"px"}, 500, function(){
+                    slider.css('left', 0).children().last().remove();
+                });
+            }
         }
 
-        function centerCurImg(){
+        function recalcWidth(){
             dWidth = $(document).width();
             $('.b-slider__item').css('width', dWidth);
-            if($('.b-slider').position().left < 0){
-                $('.b-slider').css('left', -dWidth);
-            }
         }
 
         $(window).load(function(){
             getData();
-            centerCurImg();
+            recalcWidth();
         });
 
         $(window).resize(function(){
-            centerCurImg();
+            recalcWidth();
         });
+
+        $(function(){
+            $('body').on('click', '.b-thumbs__item', function(){
+                thumbImg($(this));
+            })
+        })
     </script>
 </body>
 </html>
