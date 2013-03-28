@@ -13,63 +13,87 @@
     <i class="b-nav b-nav-next" onclick="nextImg()"></i>
     <div class="b-thumbs__bg">
         <div class="b-thumbs__wrap">
-            <ul class="b-thumbs"></ul>
+            <ul class="b-thumbs">
+            </ul>
         </div>
     </div>
     <script type="text/javascript">
+        var jsonData,
+            imagesData,
+            dWidth = $(document).width();
 
         function getData(){
             var apiUrl = 'http://api-fotki.yandex.ru/api/users/aig1001/album/63684/photos/created/?format=json&callback=?';
             $.getJSON(apiUrl, function(data) {
-                imagesPreload(data.entries, 0, 20);
-                takeFirstAndSecondImage(data.entries);
+                jsonData = data;
+                imagesData = jsonData.entries;
+                takeFirstAndSecondImage();
+                imagesPreload(0, 20);
+                $('.b-thumbs__item').first().addClass('b-thumbs__item-cur');
             });
         }
 
-        function imagesPreload(data, from, to){
+
+
+        var image = function(src, alt, cls){
+            return $('<img />', {
+                'alt':alt,
+                'src': src,
+                'class': cls
+            });
+        }
+
+        function createThumb(i){
+            var thumbImgLink = imagesData[i].img.XXS.href,
+                    thumbImgTitle= imagesData[i].title,
+                    bigImage = imagesData[i].img.L.href,
+                    thumbsWrap = $('.b-thumbs'),
+                    thumbsItem = $('<li class="b-thumbs__item"/>'),
+                    thumbsItemPrev = $('.b-thumbs__item').last(),
+                    thumbsImg = image(thumbImgLink, thumbImgTitle, 'b-thumbs__img');
+
+            thumbsItem.append(thumbsImg).appendTo(thumbsWrap).data("curInfo", { number: i, curImgSrc: bigImage });
+            if(thumbsItemPrev.length > 0){
+                thumbsItemPrev.data("nextInfo", { nextImgSrc: bigImage });
+            }
+        }
+
+        function imagesPreload(from, to){
             for (var i=from;i<to;i++)
             {
-                if(data[i]){
-                    var thumbImgLink = data[i].img.XXS.href,
-                            bigImage = data[i].img.L.href,
-                            thumbsWrap = $('.b-thumbs'),
-                            thumbsItem = $('<li class="b-thumbs__item"/>'),
-                            thumbsItemPrev = $('.b-thumbs__item').last(),
-//                            thumbsItemA = $('<a class="b-thumbs__item-a" href="'+bigImage+'"></a>'),
-                            thumbsImg = $('<img class="b-thumbs__img" src="'+thumbImgLink+'"/>');
-
-                    thumbsItem.append(thumbsImg).appendTo(thumbsWrap).data("curInfo", { number: i, curImgSrc: bigImage });
-                    if(thumbsItemPrev.length > 0){
-                        thumbsItemPrev.data("nextInfo", { nextImgSrc: bigImage });
-                    }
+                if(imagesData[i]){
+                    createThumb(i);
                 }
             }
         }
 
-        function takeFirstAndSecondImage(data){
-            var firstImgLink = data[0].img.L.href,
-                secondImgLink = data[1].img.L.href;
+        function takeFirstAndSecondImage(){
+            var firstImgLink = imagesData[0].img.L.href,
+                secondImgLink = imagesData[1].img.L.href;
 
-            $('.b-thumbs__item').first().addClass('b-thumbs__item-cur');
-
-            $('<li class="b-slider__item" style="width:'+$(document).width()+'px;"><img class="b-slider__item-img" src="'+firstImgLink+'"/></li>').appendTo('.b-slider');
-            $('<li class="b-slider__item" style="width:'+$(document).width()+'px;"><img class="b-slider__item-img" src="'+secondImgLink+'"/></li>').appendTo('.b-slider');
+            $('<li class="b-slider__item" style="width:'+dWidth+'px;"><img class="b-slider__item-img" src="'+firstImgLink+'"/></li>').appendTo('.b-slider');
+            $('<li class="b-slider__item" style="width:'+dWidth+'px;"><img class="b-slider__item-img" src="'+secondImgLink+'"/></li>').appendTo('.b-slider');
         }
 
         function nextImg(){
             var nextImgLink = $('.b-thumbs__item-cur').next().data('nextInfo').nextImgSrc;
+
             $('.b-thumbs__item-cur').removeClass('b-thumbs__item-cur').next().addClass('b-thumbs__item-cur');
-            $('.b-slider').animate({left:"-=+"+$(document).width()+"px"}, 500);
-            $('<li class="b-slider__item" style="width:'+$(document).width()+'px;"><img class="b-slider__item-img" src="'+nextImgLink+'"/></li>').appendTo('.b-slider');
+            $('.b-slider').animate({left:"-=+"+dWidth+"px"}, 500);
+            $('<li class="b-slider__item" style="width:'+dWidth+'px;"><img class="b-slider__item-img" src="'+nextImgLink+'"/></li>').appendTo('.b-slider');
         }
 
         function prevImg(){
             $('.b-thumbs__item-cur').removeClass('b-thumbs__item-cur').prev().addClass('b-thumbs__item-cur');
-            $('.b-slider').animate({left:"+="+$(document).width()+"px"}, 500);
+            $('.b-slider').animate({left:"+="+dWidth+"px"}, 500);
+        }
+
+        function takeImage(){
+
         }
 
         function centerCurImg(){
-            $('.b-slider__item').css('width', $(document).width());
+            $('.b-slider__item').css('width', dWidth);
         }
 
         $(window).load(function(){

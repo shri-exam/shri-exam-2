@@ -33,6 +33,13 @@ html, .b-page{height: 100%;}
     vertical-align: middle;
 }
 
+.b-slider:before{
+    content: '';
+    height: 100%;
+    display: inline-block;
+    vertical-align: middle;
+}
+
 .b-slider__item img{
     max-width: 100%;
     max-height: 100%;
@@ -97,10 +104,6 @@ html, .b-page{height: 100%;}
 .b-thumbs__item-cur{
     padding: 6px;
     border: 4px solid #0998ac;
-}
-
-.b-thumbs__item-a{
-    display: block;
 }
 
 .b-thumbs__img{
