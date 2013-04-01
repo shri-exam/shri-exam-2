@@ -1,12 +1,11 @@
 var slider = {
 
-    dWidth: $(document).width(),
     container: $('.b-slider'),
+    dWidth: $(document).width(),
     apiUrl: 'http://api-fotki.yandex.ru/api/users/aig1001/album/63684/photos/created/?format=json&callback=?',
 
     init: function() {
         slider.getData();
-        slider.calcWidth();
     },
 
     image: function(src, alt, cls){
@@ -153,8 +152,8 @@ $(window).load(function () {
 });
 
 $(window).resize(function () {
-    slider.calcWidth;
-    slider.thumbCentring;
+    slider.calcWidth();
+    slider.thumbCentring();
 });
 
 $(function () {
@@ -162,7 +161,7 @@ $(function () {
     $('.b-thumbs__bg').on('mousewheel', function(event, delta) {
         var val = this.scrollLeft - (delta * 30);
         $(this).scrollLeft(val);
-        slider.imagesPreload;
+        slider.imagesPreload();
     });
 
     $('.b-thumbs__wrap').mouseenter(function() {
