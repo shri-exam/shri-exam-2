@@ -75,42 +75,51 @@ function changeImg(direction, thumb) {
 
 
     if (direction == 'next'){
-        if (!thumb){
+        if (thumb && !thumb.hasClass('b-thumbs__item-selected')){
+            imageLink = thumb.data('info').src;
+            imageAlt = thumb.data('info').alt;
+
+            thumb.addClass('b-thumbs__item-selected').siblings().removeClass('b-thumbs__item-selected');
+
+            slider.append(sliderItem(imageLink, imageAlt)).animate({left: "-="+dWidth+"px"}, 500, function () {
+                slider.css('left', 0).children().first().remove();
+            });
+        }else if (!thumb && !selectedThumb.is(':last-child')){
             imageLink = selectedThumb.next().data('info').src;
             imageAlt = selectedThumb.next().data('info').alt;
 
             selectedThumb.removeClass('b-thumbs__item-selected').next().addClass('b-thumbs__item-selected');
-        }else {
+
+            slider.append(sliderItem(imageLink, imageAlt)).animate({left: "-="+dWidth+"px"}, 500, function () {
+                slider.css('left', 0).children().first().remove();
+            });
+        }
+
+    }else if (direction == 'prev'){
+        if (thumb && !thumb.hasClass('b-thumbs__item-selected')){
             imageLink = thumb.data('info').src;
             imageAlt = thumb.data('info').alt;
 
             thumb.addClass('b-thumbs__item-selected').siblings().removeClass('b-thumbs__item-selected');
-        }
 
-        slider.append(sliderItem(imageLink, imageAlt)).animate({left: "-="+dWidth+"px"}, 500, function () {
-            slider.css('left', 0).children().first().remove();
-        });
-
-    }else if (direction == 'prev'){
-        if (!thumb){
+            slider.css('left', -dWidth).prepend(sliderItem(imageLink, imageAlt)).animate({left:"+="+dWidth+"px"}, 500, function () {
+                slider.css('left', 0).children().last().remove();
+            });
+        }else if(!thumb && !selectedThumb.is(':first-child')) {
             imageLink = selectedThumb.prev().data('info').src;
             imageAlt = selectedThumb.prev().data('info').alt;
 
             selectedThumb.removeClass('b-thumbs__item-selected').prev().addClass('b-thumbs__item-selected');
-        }else {
-            imageLink = thumb.data('info').src;
-            imageAlt = thumb.data('info').alt;
 
-            thumb.addClass('b-thumbs__item-selected').siblings().removeClass('b-thumbs__item-selected');
+            slider.css('left', -dWidth).prepend(sliderItem(imageLink, imageAlt)).animate({left:"+="+dWidth+"px"}, 500, function () {
+                slider.css('left', 0).children().last().remove();
+            });
         }
-
-        slider.css('left', -dWidth).prepend(sliderItem(imageLink, imageAlt)).animate({left:"+="+dWidth+"px"}, 500, function () {
-            slider.css('left', 0).children().last().remove();
-        });
 
     }
 
     thumbCentring();
+    imagesPreload();
 
 }
 
@@ -123,7 +132,7 @@ function thumbCentring(){
     var selectedLeft = $('.b-thumbs__item-selected').position().left,
         thumbSlide = $('.b-thumbs__bg');
     if( selectedLeft > (dWidth / 2) ){
-        var calculated = selectedLeft - ((dWidth - 95) / 2);
+        var calculated = selectedLeft - ((dWidth - 190) / 2);
 
         thumbSlide.animate({
             scrollLeft: calculated
@@ -143,14 +152,13 @@ $(window).load(function () {
 
 $(window).resize(function () {
     calcWidth();
+    thumbCentring();
 });
 
 $(function () {
     $('body').on('click', '.b-thumbs__item', function () {
         changeImg('thumb', $(this));
     });
-
-
 
     $('.b-thumbs__bg').on('mousewheel', function(event, delta) {
         var val = this.scrollLeft - (delta * 30);
@@ -159,8 +167,8 @@ $(function () {
     });
 
     $('.b-thumbs__wrap').mouseenter(function() {
-        $('.b-thumbs__bg').animate({bottom:"+=95px"}, 350);
+        $('.b-thumbs__bg').animate({bottom:"+=95px"}, 500);
     }).mouseleave(function() {
-        $('.b-thumbs__bg').animate({bottom:"-=95px"}, 350);
+        $('.b-thumbs__bg').animate({bottom:"-=95px"}, 500);
     });
 });
