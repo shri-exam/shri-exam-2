@@ -66,19 +66,20 @@ html, .b-page{height: 100%;}
     background: url("../img/next.png") no-repeat;
 }
 
-.b-thumbs__bg{
+.b-thumbs__wrap{
     left: 0;
     right: 0;
     bottom: 0;
     height: 95px;
     position: fixed;
     padding: 0 40px;
-    background: rgba(0,0,0, 0.5);
 }
 
-.b-thumbs__wrap{
+.b-thumbs__bg{
+    bottom: -95px;
     overflow: hidden;
     position: relative;
+    background: rgba(0,0,0, 0.5);
 }
 
 .b-thumbs{
