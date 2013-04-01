@@ -21,25 +21,22 @@ function getData() {
     });
 }
 
-function createThumb(i) {
-    var thumbImgLink = imagesData[i].img.XXS.href,
-        thumbImgTitle = imagesData[i].title,
-        bigImage = imagesData[i].img.L.href,
-        thumbsWrap = $('.b-thumbs'),
-        thumbsItem = $('<li class="b-thumbs__item"/>'),
-        thumbsImg = image(thumbImgLink, thumbImgTitle, 'b-thumbs__img');
-
-    $('<img/>')[0].src = bigImage;
-    thumbsItem.append(thumbsImg).appendTo(thumbsWrap).data("info", { number: i, src: bigImage, alt: thumbImgTitle });
-}
-
 function imagesPreload(from, to) {
     var lastPreloaded = $('.b-thumbs__item').last().index() + 1;
     from = from || lastPreloaded;
     to = to || from + 5 ;
     for (var i = from; i < to; i++){
         if (imagesData[i]) {
-            createThumb(i);
+            var thumbImgLink = imagesData[i].img.XXS.href,
+                thumbImgTitle = imagesData[i].title,
+                bigImage = imagesData[i].img.L.href,
+                thumbsWrap = $('.b-thumbs'),
+                thumbsItem = $('<li class="b-thumbs__item"/>'),
+                thumbsImg = image(thumbImgLink, thumbImgTitle, 'b-thumbs__img');
+
+            $('<img/>')[0].src = bigImage; // preload full images to cache
+
+            thumbsItem.data("info", { number: i, src: bigImage, alt: thumbImgTitle }).append(thumbsImg).appendTo(thumbsWrap);
         }
     }
 }
@@ -113,11 +110,30 @@ function changeImg(direction, thumb) {
 
     }
 
+    thumbCentring();
+
 }
 
 function calcWidth() {
     dWidth = $(document).width();
     $('.b-slider__item').css('width', dWidth);
+}
+
+function thumbCentring(){
+    var selectedLeft = $('.b-thumbs__item-selected').position().left,
+        thumbSlide = $('.b-thumbs__bg');
+    if( selectedLeft > (dWidth / 2) ){
+        var calculated = selectedLeft - ((dWidth - 95) / 2);
+
+        thumbSlide.animate({
+            scrollLeft: calculated
+        }, 500);
+    }else {
+        thumbSlide.animate({
+            scrollLeft: 0
+        }, 500);
+    }
+
 }
 
 $(window).load(function () {
@@ -137,7 +153,7 @@ $(function () {
 
 
     $('.b-thumbs__bg').on('mousewheel', function(event, delta) {
-        var val = this.scrollLeft - (delta * 50);
+        var val = this.scrollLeft - (delta * 30);
         $(this).scrollLeft(val);
         imagesPreload();
     });
