@@ -15,6 +15,9 @@ var slider = {
 
     setImgId: function(){
         slider.imgid = history.location.search.replace('?imgid=', '') || 0;
+        if(slider.imgid > slider.loadOnStart){
+            slider.loadOnStart = slider.loadOnStart + slider.imgid;
+        }
     },
 
     image: function(src, alt, cls){
@@ -40,12 +43,12 @@ var slider = {
             slider.imagesData = data.entries;
 
             slider.takeFirstImage();
-            slider.imagesPreload(0, slider.loadOnStart);
+            slider.imagesLoad(0, slider.loadOnStart);
             $('.b-thumbs__item').first().addClass('b-thumbs__item-selected');
         });
     },
 
-    imagesPreload: function(from, to) {
+    imagesLoad: function(from, to) {
         var lastPreloaded = $('.b-thumbs__item').last().index() + 1;
         from = from || lastPreloaded;
         to = to || from + 5 ;
@@ -58,7 +61,7 @@ var slider = {
                     thumbsItem = $('<li class="b-thumbs__item"/>'),
                     thumbsImg = slider.image(thumbImgLink, thumbImgTitle, 'b-thumbs__img');
 
-                $('<img/>')[0].src = bigImage; // preload full images to cache
+                $('<img/>')[0].src = bigImage; // load full images to cache
 
                 thumbsItem.data("info", { number: i, src: bigImage, alt: thumbImgTitle }).click(function () {slider.changeImg('thumb', $(this));}).append(thumbsImg).appendTo(thumbsWrap);
             }
@@ -132,13 +135,17 @@ var slider = {
         }
 
         slider.thumbCentring();
-        slider.imagesPreload();
-        history.pushState( null, null, '?imgid='+slider.imgid );
+        slider.imagesLoad();
+        slider.updateUrl(selectedThumb.data('info').number);
     },
 
     calcWidth: function() {
         slider.dWidth = $(document).width();
         $('.b-slider__item').css('width', slider.dWidth);
+    },
+
+    updateUrl: function(id) {
+        history.pushState( null, null, '?imgid='+id);
     },
 
     thumbCentring: function(){
@@ -161,7 +168,7 @@ var slider = {
         slider.thumbsBgWrap.mousewheel(function(event, delta) {
             var val = this.scrollLeft - (delta * 30);
             $(this).scrollLeft(val);
-            slider.imagesPreload();
+            slider.imagesLoad();
         });
 
         $('.b-thumbs__wrap').hover(function() {
