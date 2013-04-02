@@ -14,7 +14,7 @@ var slider = {
     },
 
     setImgId: function(){
-        slider.imgid = history.location.search || 0;
+        slider.imgid = history.location.search.replace('?imgid=', '') || 0;
     },
 
     image: function(src, alt, cls){
