@@ -14,28 +14,11 @@ var slider = {
     },
 
     setImgId: function(){
-        slider.imgid = history.location.search.replace('?imgid=', '') || 0;
+        var getUrlData = history.location.search.replace('?imgid=', '');
+        slider.imgid = parseFloat(getUrlData)  || 0;
         if(slider.imgid > slider.loadOnStart){
             slider.loadOnStart = slider.loadOnStart + slider.imgid;
         }
-    },
-
-    image: function(src, alt, cls){
-        return $('<img />', {
-            'alt': alt,
-            'src': src,
-            'class': cls
-        });
-    },
-
-    sliderItem: function (link, alt){
-        alt = alt || 'alt';
-        return $('<li />',{
-            class: 'b-slider__item',
-            css: ({
-                width: slider.dWidth
-            })
-        }).append(slider.image(link, alt, 'b-slider__img'));
     },
 
     getData: function(){
@@ -44,6 +27,36 @@ var slider = {
 
             slider.takeFirstImage();
             slider.imagesLoad(0, slider.loadOnStart);
+            slider.thumbCentring();
+        });
+    },
+
+    takeFirstImage: function() {
+        var link = slider.imagesData[slider.imgid].img.L.href,
+            alt = slider.imagesData[slider.imgid].title;
+
+        slider.createItem(link, alt, 'b-slider__item', 'b-slider__img').appendTo(slider.container);
+    },
+
+    createItem: function (link, alt, itemCls, imgCls){
+        alt = alt || 'alt';
+        var itemWidth;
+        if(itemCls === 'b-slider__item') {
+            itemWidth = slider.dWidth;
+        }
+        return $('<li />',{
+            class: itemCls,
+            css: ({
+                width: itemWidth
+            })
+        }).append(slider.image(link, alt, imgCls));
+    },
+
+    image: function(src, alt, cls){
+        return $('<img />', {
+            'alt': alt,
+            'src': src,
+            'class': cls
         });
     },
 
@@ -57,26 +70,14 @@ var slider = {
                     thumbImgTitle = slider.imagesData[i].title,
                     bigImage = slider.imagesData[i].img.L.href,
                     thumbsWrap = $('.b-thumbs'),
-                    thumbsItem = $('<li class="b-thumbs__item"/>'),
-                    thumbsImg = slider.image(thumbImgLink, thumbImgTitle, 'b-thumbs__img');
+                    thumbsItemCls = (i === slider.imgid)? 'b-thumbs__item b-thumbs__item-selected' : 'b-thumbs__item',
+                    thumbsItem = slider.createItem(thumbImgLink, thumbImgTitle, thumbsItemCls, 'b-thumbs__img');
 
                 $('<img/>')[0].src = bigImage; // load full images to cache
-                if( i === slider.imgid){
-                    thumbsImg = $('<li class="b-thumbs__item b-thumbs__item-selected"/>');
-                }
 
-                thumbsItem.data("info", { number: i, src: bigImage, alt: thumbImgTitle }).click(function () {slider.changeImg('thumb', $(this));}).append(thumbsImg).appendTo(thumbsWrap);
-
-
+                thumbsWrap.append(thumbsItem.data("info", { number: i, src: bigImage, alt: thumbImgTitle }).click(function () {slider.changeImg('thumb', $(this));}));
             }
         }
-    },
-
-    takeFirstImage: function() {
-        var link = slider.imagesData[slider.imgid].img.L.href,
-            alt = slider.imagesData[slider.imgid].title;
-
-        slider.sliderItem(link, alt).appendTo(slider.container);
     },
 
     changeImg: function(direction, thumb) {
@@ -103,7 +104,7 @@ var slider = {
 
                 thumb.addClass('b-thumbs__item-selected').siblings().removeClass('b-thumbs__item-selected');
 
-                slider.container.append(slider.sliderItem(imageLink, imageAlt)).animate({left: "-="+slider.dWidth+"px"}, 500, function () {
+                slider.container.append(slider.createItem(imageLink, imageAlt, 'b-slider__item', 'b-slider__img')).animate({left: "-="+slider.dWidth+"px"}, 500, function () {
                     slider.container.css('left', 0).children().first().remove();
                 });
             }else if (!thumb && !selectedThumb.is(':last-child')){
@@ -113,7 +114,7 @@ var slider = {
 
                 selectedThumb.removeClass('b-thumbs__item-selected').next().addClass('b-thumbs__item-selected');
 
-                slider.container.append(slider.sliderItem(imageLink, imageAlt)).animate({left: "-="+slider.dWidth+"px"}, 500, function () {
+                slider.container.append(slider.createItem(imageLink, imageAlt, 'b-slider__item', 'b-slider__img')).animate({left: "-="+slider.dWidth+"px"}, 500, function () {
                     slider.container.css('left', 0).children().first().remove();
                 });
             }
@@ -126,7 +127,7 @@ var slider = {
 
                 thumb.addClass('b-thumbs__item-selected').siblings().removeClass('b-thumbs__item-selected');
 
-                slider.container.css('left', -slider.dWidth).prepend(slider.sliderItem(imageLink, imageAlt)).animate({left:"+="+slider.dWidth+"px"}, 500, function () {
+                slider.container.css('left', -slider.dWidth).prepend(slider.createItem(imageLink, imageAlt, 'b-slider__item', 'b-slider__img')).animate({left:"+="+slider.dWidth+"px"}, 500, function () {
                     slider.container.css('left', 0).children().last().remove();
                 });
             }else if(!thumb && !selectedThumb.is(':first-child')) {
@@ -136,15 +137,15 @@ var slider = {
 
                 selectedThumb.removeClass('b-thumbs__item-selected').prev().addClass('b-thumbs__item-selected');
 
-                slider.container.css('left', -slider.dWidth).prepend(slider.sliderItem(imageLink, imageAlt)).animate({left:"+="+slider.dWidth+"px"}, 500, function () {
+                slider.container.css('left', -slider.dWidth).prepend(slider.createItem(imageLink, imageAlt, 'b-slider__item', 'b-slider__img')).animate({left:"+="+slider.dWidth+"px"}, 500, function () {
                     slider.container.css('left', 0).children().last().remove();
                 });
             }
 
         }
 
-        slider.thumbCentring();
         slider.imagesLoad();
+        slider.thumbCentring();
         slider.updateUrl(imageNumber);
     },
 
