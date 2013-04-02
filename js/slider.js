@@ -8,17 +8,16 @@ var slider = {
     apiUrl: 'http://api-fotki.yandex.ru/api/users/aig1001/album/63684/photos/created/?format=json&callback=?',
 
     init: function() {
-        slider.setImgId();
+        var urlData = history.location.search.replace('?imgid=', '');
+        if(urlData != ""){
+            slider.imgid = parseFloat(urlData);
+            if(slider.imgid > slider.loadOnStart){
+                slider.loadOnStart = slider.loadOnStart + slider.imgid;
+            }
+        }
+
         slider.getData();
         slider.binds();
-    },
-
-    setImgId: function(){
-        var getUrlData = history.location.search.replace('?imgid=', '');
-        slider.imgid = slider.imgid || parseFloat(getUrlData);
-        if(slider.imgid > slider.loadOnStart){
-            slider.loadOnStart = slider.loadOnStart + slider.imgid;
-        }
     },
 
     getData: function(){
