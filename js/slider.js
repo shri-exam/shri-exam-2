@@ -8,9 +8,9 @@ var slider = {
     apiUrl: 'http://api-fotki.yandex.ru/api/users/aig1001/album/63684/photos/created/?format=json&callback=?',
 
     init: function() {
-        var urlData = history.location.search.replace('?imgid=', '');
+        var urlData = history.location.search;
         if(urlData != ""){
-            slider.imgid = parseFloat(urlData);
+            slider.imgid = parseFloat(urlData.replace('?imgid=', ''));
             if(slider.imgid > slider.loadOnStart){
                 slider.loadOnStart = slider.loadOnStart + slider.imgid;
             }
