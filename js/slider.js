@@ -61,8 +61,13 @@ var slider = {
                     thumbsImg = slider.image(thumbImgLink, thumbImgTitle, 'b-thumbs__img');
 
                 $('<img/>')[0].src = bigImage; // load full images to cache
+                if( i === slider.imgid){
+                    thumbsImg = $('<li class="b-thumbs__item b-thumbs__item-selected"/>');
+                }
 
                 thumbsItem.data("info", { number: i, src: bigImage, alt: thumbImgTitle }).click(function () {slider.changeImg('thumb', $(this));}).append(thumbsImg).appendTo(thumbsWrap);
+
+
             }
         }
     },
@@ -72,9 +77,6 @@ var slider = {
             alt = slider.imagesData[slider.imgid].title;
 
         slider.sliderItem(link, alt).appendTo(slider.container);
-        $('.b-thumbs__item').filter(function() {
-            $(this).data('info').number === slider.imgid;
-        }).addClass('b-thumbs__item-selected');
     },
 
     changeImg: function(direction, thumb) {
