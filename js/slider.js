@@ -80,6 +80,7 @@ var slider = {
         var selectedThumb = $('.b-thumbs__item-selected'),
             imageLink,
             imageAlt,
+            imageNumber,
             getDirection = function (thumb){
                 if(selectedThumb.index() < thumb.index()){
                     return 'next';
@@ -94,6 +95,7 @@ var slider = {
             if (thumb && !thumb.hasClass('b-thumbs__item-selected')){
                 imageLink = thumb.data('info').src;
                 imageAlt = thumb.data('info').alt;
+                imageNumber = thumb.data('info').number;
 
                 thumb.addClass('b-thumbs__item-selected').siblings().removeClass('b-thumbs__item-selected');
 
@@ -103,6 +105,7 @@ var slider = {
             }else if (!thumb && !selectedThumb.is(':last-child')){
                 imageLink = selectedThumb.next().data('info').src;
                 imageAlt = selectedThumb.next().data('info').alt;
+                imageNumber = selectedThumb.next().data('info').number;
 
                 selectedThumb.removeClass('b-thumbs__item-selected').next().addClass('b-thumbs__item-selected');
 
@@ -115,6 +118,7 @@ var slider = {
             if (thumb && !thumb.hasClass('b-thumbs__item-selected')){
                 imageLink = thumb.data('info').src;
                 imageAlt = thumb.data('info').alt;
+                imageNumber = thumb.data('info').number;
 
                 thumb.addClass('b-thumbs__item-selected').siblings().removeClass('b-thumbs__item-selected');
 
@@ -124,6 +128,7 @@ var slider = {
             }else if(!thumb && !selectedThumb.is(':first-child')) {
                 imageLink = selectedThumb.prev().data('info').src;
                 imageAlt = selectedThumb.prev().data('info').alt;
+                imageNumber = selectedThumb.prev().data('info').number;
 
                 selectedThumb.removeClass('b-thumbs__item-selected').prev().addClass('b-thumbs__item-selected');
 
@@ -136,7 +141,7 @@ var slider = {
 
         slider.thumbCentring();
         slider.imagesLoad();
-        slider.updateUrl(selectedThumb.data('info').number);
+        slider.updateUrl(imageNumber);
     },
 
     calcWidth: function() {
