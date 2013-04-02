@@ -62,7 +62,7 @@ var slider = {
     imagesLoad: function(from, to) {
         var lastPreloaded = $('.b-thumbs__item').last().index() + 1;
         from = from || lastPreloaded;
-        to = to || from + 5 ;
+        to = to || from + 5;
         for (var i = from; i < to; i++){
             if (slider.imagesData[i]) {
                 var thumbImgLink = slider.imagesData[i].img.XXS.href,
@@ -113,9 +113,7 @@ var slider = {
                 selectedThumb.removeClass('b-thumbs__item-selected').next().addClass('b-thumbs__item-selected');
 
                 slider.sliderNext(imageLink, imageAlt, imageNumber);
-
             }
-
         }else if (direction == 'prev'){
             if (thumb && !thumb.hasClass('b-thumbs__item-selected')){
                 imageLink = thumb.data('info').src;
@@ -134,16 +132,15 @@ var slider = {
                 selectedThumb.removeClass('b-thumbs__item-selected').prev().addClass('b-thumbs__item-selected');
 
                 slider.sliderPrev(imageLink, imageAlt, imageNumber);
-
             }
-
         }
-
     },
 
     sliderNext: function(link, alt, id){
-        slider.container.append(slider.createItem(link, alt, 'b-slider__item', 'b-slider__img')).animate({left: "-="+slider.dWidth+"px"}, 500, function () {
-            slider.container.css('left', 0).children().first().remove();
+        slider.container
+            .append(slider.createItem(link, alt, 'b-slider__item', 'b-slider__img'))
+            .animate({left: "-="+slider.dWidth+"px"}, 500, function () {
+                slider.container.css('left', 0).children().first().remove();
         });
 
         slider.imagesLoad();
@@ -152,11 +149,13 @@ var slider = {
     },
 
     sliderPrev: function(link, alt, id){
-        slider.container.css('left', -slider.dWidth).prepend(slider.createItem(link, alt, 'b-slider__item', 'b-slider__img')).animate({left:"+="+slider.dWidth+"px"}, 500, function () {
-            slider.container.css('left', 0).children().last().remove();
+        slider.container
+            .css('left', -slider.dWidth)
+            .prepend(slider.createItem(link, alt, 'b-slider__item', 'b-slider__img'))
+            .animate({left:"+="+slider.dWidth+"px"}, 500, function () {
+                slider.container.css('left', 0).children().last().remove();
         });
 
-        slider.imagesLoad();
         slider.updateUrl(id);
         slider.thumbCentring();
     },
@@ -167,29 +166,57 @@ var slider = {
     },
 
     updateUrl: function(id) {
-        if(id) { history.pushState( null, null, '?imgid='+id); }
+        if(id >= 0) { history.pushState( null, null, '?imgid='+id); }
+    },
 
+    toggleNav: function() {
+        var selectedThmb = $('.b-thumbs__item-selected'),
+            navNext = $('.b-nav-next'),
+            navPrev = $('.b-nav-prev');
+
+        if(!selectedThmb.is(':last-child')){
+            navNext.addClass('b-nav--active');
+        }else{
+            navNext.removeClass('b-nav--active');
+        }
+        if(!selectedThmb.is(':first-child')){
+            navPrev.addClass('b-nav--active');
+        }else{
+            navPrev.removeClass('b-nav--active');
+
+        }
     },
 
     thumbCentring: function(){
         var selectedLeft = $('.b-thumbs__item-selected').position().left;
+
         if( selectedLeft > (slider.dWidth / 2) ){
             var calculated = selectedLeft - ((slider.dWidth - 190) / 2);
 
-            slider.thumbsBgWrap.animate({
-                scrollLeft: calculated
-            }, 500);
+            if(slider.thumbsBgWrap.hasClass('b-thumbs__bg--up')){
+                slider.thumbsBgWrap.animate({
+                    scrollLeft: calculated
+                }, 500);
+            }else{
+                slider.thumbsBgWrap.scrollLeft(calculated);
+            }
         }else {
+            if(slider.thumbsBgWrap.hasClass('b-thumbs__bg--up')){
             slider.thumbsBgWrap.animate({
                 scrollLeft: 0
             }, 500);
+            }else{
+                slider.thumbsBgWrap.scrollLeft(0);
+            }
         }
+
+        slider.toggleNav();
     },
 
     binds: function() {
 
         slider.thumbsBgWrap.mousewheel(function(event, delta) {
-            var val = this.scrollLeft - (delta * 30);
+            var val = this.scrollLeft - (delta * 50);
             $(this).scrollLeft(val);
             slider.imagesLoad();
         });
@@ -201,6 +228,10 @@ var slider = {
         $(window).resize(function () {
             slider.calcWidth();
             slider.thumbCentring();
+        });
+
+        $(document).hover(function () {
+           $('.b-nav').toggleClass('b-nav--show');
         });
     }
 

@@ -48,22 +48,37 @@ html, .b-page{height: 100%;}
 
 .b-nav{
     top: 50%;
+    opacity: 0;
     width: 92px;
     height: 91px;
     display: block;
     cursor: pointer;
     margin-top: -46px;
     position: absolute;
+    -webkit-transition: opacity 0.3s linear;
+    -moz-transition: opacity 0.3s linear;
+    -o-transition: opacity 0.3s  linear;
+    -ms-transition: opacity 0.3s linear;
+    transition: opacity 0.3s linear;
 }
 
 .b-nav-prev{
     left: 20px;
-    background: url("../img/prev.png") no-repeat;
+    background: url("../img/arrows.png") no-repeat;
 }
 
 .b-nav-next{
     right: 20px;
-    background: url("../img/next.png") no-repeat;
+    background: url("../img/arrows.png") no-repeat 0 -94px;
+}
+
+.b-nav--show.b-nav--active{
+    opacity: 1;
+    -webkit-transition: opacity 0.3s linear;
+    -moz-transition: opacity 0.3s linear;
+    -o-transition: opacity 0.3s  linear;
+    -ms-transition: opacity 0.3s linear;
+    transition: opacity 0.3s linear;
 }
 
 .b-thumbs__wrap{
@@ -80,20 +95,20 @@ html, .b-page{height: 100%;}
     overflow: hidden;
     position: relative;
     background: rgba(0,0,0, 0.5);
-    -webkit-transition: bottom 0.4s linear;
-    -moz-transition: bottom 0.4s linear;
-    -o-transition: bottom 0.4s  linear;
-    -ms-transition: bottom 0.4s linear;
-    transition: bottom 0.4s linear;
+    -webkit-transition: bottom 0.2s linear;
+    -moz-transition: bottom 0.2s linear;
+    -o-transition: bottom 0.2s  linear;
+    -ms-transition: bottom 0.2s linear;
+    transition: bottom 0.2s linear;
 }
 
 .b-thumbs__bg--up{
     bottom: 0;
-    -webkit-transition: bottom 0.4s 0.4s linear;
-    -moz-transition: bottom 0.4s 0.4s linear;
-    -o-transition: bottom 0.4s 0.4s linear;
-    -ms-transition: bottom 0.4s 0.4s linear;
-    transition: bottom 0.4s 0.4s linear;
+    -webkit-transition: bottom 0.2s linear;
+    -moz-transition: bottom 0.2s linear;
+    -o-transition: bottom 0.2s  linear;
+    -ms-transition: bottom 0.2s linear;
+    transition: bottom 0.2s linear;
 }
 
 .b-thumbs{
