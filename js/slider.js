@@ -15,7 +15,7 @@ var slider = {
 
     setImgId: function(){
         var getUrlData = history.location.search.replace('?imgid=', '');
-        slider.imgid = parseFloat(getUrlData)  || 0;
+        slider.imgid = slider.imgid || parseFloat(getUrlData);
         if(slider.imgid > slider.loadOnStart){
             slider.loadOnStart = slider.loadOnStart + slider.imgid;
         }
