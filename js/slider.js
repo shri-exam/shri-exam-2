@@ -2,9 +2,9 @@ var slider = {
 
     imgid: 0,
     loadOnStart: 20,
-    container: $('.b-slider'),
-    dWidth: $(window).width(),
     thumbs: $('.b-thumbs'),
+    container: $('.b-slider'),
+    windowWidth: $(window).width(),
     thumbsWrap: $('.b-thumbs-wrap'),
     thumbsList: $('.b-thumbs-list'),
     apiUrl: 'http://api-fotki.yandex.ru/api/users/aig1001/album/63684/photos/created/?format=json&callback=?',
@@ -41,7 +41,7 @@ var slider = {
         alt = alt || 'alt';
         var itemWidth;
         if(itemCls === 'b-slider__item') {
-            itemWidth = slider.dWidth;
+            itemWidth = slider.windowWidth;
         }
         return $('<li />',{
             class: itemCls,
@@ -61,6 +61,7 @@ var slider = {
 
     imagesLoad: function(from, to) {
         var lastPreloaded = $('.b-thumbs__item').last().index() + 1;
+
         from = from || lastPreloaded;
         to = to || from + 5;
         for (var i = from; i < to; i++){
@@ -102,7 +103,7 @@ var slider = {
 
                 thumb.addClass('b-thumbs__item-selected').siblings().removeClass('b-thumbs__item-selected');
 
-                slider.sliderNext(imageLink, imageAlt, imageNumber);
+                slider.slideNext(imageLink, imageAlt, imageNumber);
 
             }else if (!thumb && !selectedThumb.is(':last-child')){
                 imageLink = selectedThumb.next().data('info').src;
@@ -111,7 +112,7 @@ var slider = {
 
                 selectedThumb.removeClass('b-thumbs__item-selected').next().addClass('b-thumbs__item-selected');
 
-                slider.sliderNext(imageLink, imageAlt, imageNumber);
+                slider.slideNext(imageLink, imageAlt, imageNumber);
             }
         }else if (direction == 'prev'){
             if (thumb && !thumb.hasClass('b-thumbs__item-selected')){
@@ -121,7 +122,7 @@ var slider = {
 
                 thumb.addClass('b-thumbs__item-selected').siblings().removeClass('b-thumbs__item-selected');
 
-                slider.sliderPrev(imageLink, imageAlt, imageNumber);
+                slider.slidePrev(imageLink, imageAlt, imageNumber);
 
             }else if(!thumb && !selectedThumb.is(':first-child')) {
                 imageLink = selectedThumb.prev().data('info').src;
@@ -130,15 +131,15 @@ var slider = {
 
                 selectedThumb.removeClass('b-thumbs__item-selected').prev().addClass('b-thumbs__item-selected');
 
-                slider.sliderPrev(imageLink, imageAlt, imageNumber);
+                slider.slidePrev(imageLink, imageAlt, imageNumber);
             }
         }
     },
 
-    sliderNext: function(link, alt, id){
+    slideNext: function(link, alt, id){
         slider.container
             .append(slider.createItem(link, alt, 'b-slider__item', 'b-slider__img'))
-            .animate({left: "-="+slider.dWidth+"px"}, 500, function () {
+            .animate({left: "-="+slider.windowWidth+"px"}, 500, function () {
                 slider.container.css('left', 0).children().first().remove();
         });
 
@@ -146,11 +147,11 @@ var slider = {
         slider.thumbCentring();
     },
 
-    sliderPrev: function(link, alt, id){
+    slidePrev: function(link, alt, id){
         slider.container
-            .css('left', -slider.dWidth)
+            .css('left', -slider.windowWidth)
             .prepend(slider.createItem(link, alt, 'b-slider__item', 'b-slider__img'))
-            .animate({left:"+="+slider.dWidth+"px"}, 500, function () {
+            .animate({left:"+="+slider.windowWidth+"px"}, 500, function () {
                 slider.container.css('left', 0).children().last().remove();
         });
 
@@ -159,8 +160,8 @@ var slider = {
     },
 
     calcWidth: function() {
-        slider.dWidth = $(window).width();
-        $('.b-slider__item').css('width', slider.dWidth);
+        slider.windowWidth = $(window).width();
+        $('.b-slider__item').css('width', slider.windowWidth);
     },
 
     updateUrl: function(id) {
@@ -187,8 +188,8 @@ var slider = {
     thumbCentring: function(){
         var selectedLeft = $('.b-thumbs__item-selected').position().left;
 
-        if( selectedLeft > (slider.dWidth / 2) ){
-            var calculated = selectedLeft - ((slider.dWidth - 190) / 2);
+        if( selectedLeft > (slider.windowWidth / 2) ){
+            var calculated = selectedLeft - ((slider.windowWidth - 190) / 2);
 
             if(slider.thumbsWrap.hasClass('b-thumbs--show')){
                 slider.thumbsWrap.animate({

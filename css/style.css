@@ -8,10 +8,6 @@ html, .b-page{height: 100%;}
     overflow: hidden;
 }
 
-.b-slider__wrap{
-    position: relative;
-}
-
 .b-slider{
     left: 0;
     margin: 0;
@@ -93,6 +89,7 @@ html, .b-page{height: 100%;}
     bottom: -95px;
     overflow: hidden;
     position: relative;
+    background: rgba(0,0,0, 0.5);
     -webkit-transition: bottom 0.2s linear;
     -moz-transition: bottom 0.2s linear;
     -o-transition: bottom 0.2s  linear;
@@ -125,7 +122,7 @@ html, .b-page{height: 100%;}
     list-style: none;
     vertical-align: top;
     display: inline-block;
-    background: rgba(0,0,0, 0.5) url("../img/loader.gif") no-repeat 50% 50%;
+    background: url("../img/loader.gif") no-repeat 50% 50%;
 }
 
 .b-thumbs__item-selected{
