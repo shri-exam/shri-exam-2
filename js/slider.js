@@ -3,17 +3,17 @@ var slider = {
     imgid: 0,
     loadOnStart: 20,
     container: $('.b-slider'),
-    dWidth: $(document).width(),
-    thumbsBgWrap: $('.b-thumbs__bg'),
+    dWidth: $(window).width(),
+    thumbs: $('.b-thumbs'),
+    thumbsWrap: $('.b-thumbs-wrap'),
+    thumbsList: $('.b-thumbs-list'),
     apiUrl: 'http://api-fotki.yandex.ru/api/users/aig1001/album/63684/photos/created/?format=json&callback=?',
 
     init: function() {
         var urlData = history.location.search;
         if(urlData != ""){
             slider.imgid = parseFloat(urlData.replace('?imgid=', ''));
-            if(slider.imgid > slider.loadOnStart){
-                slider.loadOnStart = slider.loadOnStart + slider.imgid;
-            }
+            slider.loadOnStart = slider.imgid + slider.loadOnStart;
         }
 
         slider.getData();
@@ -68,13 +68,12 @@ var slider = {
                 var thumbImgLink = slider.imagesData[i].img.XXS.href,
                     thumbImgTitle = slider.imagesData[i].title,
                     bigImage = slider.imagesData[i].img.L.href,
-                    thumbsWrap = $('.b-thumbs'),
                     thumbsItemCls = (i === slider.imgid)? 'b-thumbs__item b-thumbs__item-selected' : 'b-thumbs__item',
                     thumbsItem = slider.createItem(thumbImgLink, thumbImgTitle, thumbsItemCls, 'b-thumbs__img');
 
                 $('<img/>')[0].src = bigImage; // load full images to cache
 
-                thumbsWrap.append(thumbsItem.data("info", { number: i, src: bigImage, alt: thumbImgTitle }).click(function () {slider.changeImg('thumb', $(this));}));
+                slider.thumbsList.append(thumbsItem.data("info", { number: i, src: bigImage, alt: thumbImgTitle }).click(function () {slider.changeImg('thumb', $(this));}));
             }
         }
     },
@@ -143,7 +142,6 @@ var slider = {
                 slider.container.css('left', 0).children().first().remove();
         });
 
-        slider.imagesLoad();
         slider.updateUrl(id);
         slider.thumbCentring();
     },
@@ -161,7 +159,7 @@ var slider = {
     },
 
     calcWidth: function() {
-        slider.dWidth = $(document).width();
+        slider.dWidth = $(window).width();
         $('.b-slider__item').css('width', slider.dWidth);
     },
 
@@ -170,20 +168,19 @@ var slider = {
     },
 
     toggleNav: function() {
-        var selectedThmb = $('.b-thumbs__item-selected'),
+        var selectedThumb = $('.b-thumbs__item-selected'),
             navNext = $('.b-nav-next'),
             navPrev = $('.b-nav-prev');
 
-        if(!selectedThmb.is(':last-child')){
+        if(!selectedThumb.is(':last-child')){
             navNext.addClass('b-nav--active');
         }else{
             navNext.removeClass('b-nav--active');
         }
-        if(!selectedThmb.is(':first-child')){
+        if(!selectedThumb.is(':first-child')){
             navPrev.addClass('b-nav--active');
         }else{
             navPrev.removeClass('b-nav--active');
-
         }
     },
 
@@ -193,36 +190,37 @@ var slider = {
         if( selectedLeft > (slider.dWidth / 2) ){
             var calculated = selectedLeft - ((slider.dWidth - 190) / 2);
 
-            if(slider.thumbsBgWrap.hasClass('b-thumbs__bg--up')){
-                slider.thumbsBgWrap.animate({
+            if(slider.thumbsWrap.hasClass('b-thumbs--show')){
+                slider.thumbsWrap.animate({
                     scrollLeft: calculated
                 }, 500);
             }else{
-                slider.thumbsBgWrap.scrollLeft(calculated);
+                slider.thumbsWrap.scrollLeft(calculated);
             }
         }else {
-            if(slider.thumbsBgWrap.hasClass('b-thumbs__bg--up')){
-            slider.thumbsBgWrap.animate({
-                scrollLeft: 0
-            }, 500);
+            if(slider.thumbsWrap.hasClass('b-thumbs--show')){
+                slider.thumbsWrap.animate({
+                    scrollLeft: 0
+                }, 500);
             }else{
-                slider.thumbsBgWrap.scrollLeft(0);
+                slider.thumbsWrap.scrollLeft(0);
             }
         }
 
         slider.toggleNav();
+        slider.imagesLoad();
     },
 
     binds: function() {
 
-        slider.thumbsBgWrap.mousewheel(function(event, delta) {
+        slider.thumbsWrap.mousewheel(function(event, delta) {
             var val = this.scrollLeft - (delta * 50);
             $(this).scrollLeft(val);
             slider.imagesLoad();
         });
 
-        $('.b-thumbs__wrap').hover(function() {
-            slider.thumbsBgWrap.toggleClass('b-thumbs__bg--up');
+        slider.thumbs.hover(function() {
+            slider.thumbsWrap.toggleClass('b-thumbs--show');
         });
 
         $(window).resize(function () {

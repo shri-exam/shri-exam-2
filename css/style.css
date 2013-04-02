@@ -5,12 +5,10 @@ html, .b-page{height: 100%;}
     padding: 0;
     background: #000;
     position: relative;
+    overflow: hidden;
 }
 
 .b-slider__wrap{
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
     position: relative;
 }
 
@@ -81,20 +79,20 @@ html, .b-page{height: 100%;}
     transition: opacity 0.3s linear;
 }
 
-.b-thumbs__wrap{
+.b-thumbs{
     left: 0;
     right: 0;
     bottom: 0;
     height: 95px;
     position: fixed;
     padding: 0 40px;
+    overflow: hidden;
 }
 
-.b-thumbs__bg{
+.b-thumbs-wrap{
     bottom: -95px;
     overflow: hidden;
     position: relative;
-    background: rgba(0,0,0, 0.5);
     -webkit-transition: bottom 0.2s linear;
     -moz-transition: bottom 0.2s linear;
     -o-transition: bottom 0.2s  linear;
@@ -102,7 +100,7 @@ html, .b-page{height: 100%;}
     transition: bottom 0.2s linear;
 }
 
-.b-thumbs__bg--up{
+.b-thumbs--show{
     bottom: 0;
     -webkit-transition: bottom 0.2s linear;
     -moz-transition: bottom 0.2s linear;
@@ -111,8 +109,7 @@ html, .b-page{height: 100%;}
     transition: bottom 0.2s linear;
 }
 
-.b-thumbs{
-    left: 0;
+.b-thumbs-list{
     margin: 0;
     padding: 0;
     position: relative;
@@ -128,7 +125,7 @@ html, .b-page{height: 100%;}
     list-style: none;
     vertical-align: top;
     display: inline-block;
-    background: url("../img/loader.gif") no-repeat 50% 50%;
+    background: rgba(0,0,0, 0.5) url("../img/loader.gif") no-repeat 50% 50%;
 }
 
 .b-thumbs__item-selected{
