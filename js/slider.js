@@ -103,9 +103,8 @@ var slider = {
 
                 thumb.addClass('b-thumbs__item-selected').siblings().removeClass('b-thumbs__item-selected');
 
-                slider.container.append(slider.createItem(imageLink, imageAlt, 'b-slider__item', 'b-slider__img')).animate({left: "-="+slider.dWidth+"px"}, 500, function () {
-                    slider.container.css('left', 0).children().first().remove();
-                });
+                slider.sliderNext(imageLink, imageAlt, imageNumber);
+
             }else if (!thumb && !selectedThumb.is(':last-child')){
                 imageLink = selectedThumb.next().data('info').src;
                 imageAlt = selectedThumb.next().data('info').alt;
@@ -113,9 +112,8 @@ var slider = {
 
                 selectedThumb.removeClass('b-thumbs__item-selected').next().addClass('b-thumbs__item-selected');
 
-                slider.container.append(slider.createItem(imageLink, imageAlt, 'b-slider__item', 'b-slider__img')).animate({left: "-="+slider.dWidth+"px"}, 500, function () {
-                    slider.container.css('left', 0).children().first().remove();
-                });
+                slider.sliderNext(imageLink, imageAlt, imageNumber);
+
             }
 
         }else if (direction == 'prev'){
@@ -126,9 +124,8 @@ var slider = {
 
                 thumb.addClass('b-thumbs__item-selected').siblings().removeClass('b-thumbs__item-selected');
 
-                slider.container.css('left', -slider.dWidth).prepend(slider.createItem(imageLink, imageAlt, 'b-slider__item', 'b-slider__img')).animate({left:"+="+slider.dWidth+"px"}, 500, function () {
-                    slider.container.css('left', 0).children().last().remove();
-                });
+                slider.sliderPrev(imageLink, imageAlt, imageNumber);
+
             }else if(!thumb && !selectedThumb.is(':first-child')) {
                 imageLink = selectedThumb.prev().data('info').src;
                 imageAlt = selectedThumb.prev().data('info').alt;
@@ -136,16 +133,32 @@ var slider = {
 
                 selectedThumb.removeClass('b-thumbs__item-selected').prev().addClass('b-thumbs__item-selected');
 
-                slider.container.css('left', -slider.dWidth).prepend(slider.createItem(imageLink, imageAlt, 'b-slider__item', 'b-slider__img')).animate({left:"+="+slider.dWidth+"px"}, 500, function () {
-                    slider.container.css('left', 0).children().last().remove();
-                });
+                slider.sliderPrev(imageLink, imageAlt, imageNumber);
+
             }
 
         }
 
+    },
+
+    sliderNext: function(link, alt, id){
+        slider.container.append(slider.createItem(link, alt, 'b-slider__item', 'b-slider__img')).animate({left: "-="+slider.dWidth+"px"}, 500, function () {
+            slider.container.css('left', 0).children().first().remove();
+        });
+
         slider.imagesLoad();
+        slider.updateUrl(id);
         slider.thumbCentring();
-        slider.updateUrl(imageNumber);
+    },
+
+    sliderPrev: function(link, alt, id){
+        slider.container.css('left', -slider.dWidth).prepend(slider.createItem(link, alt, 'b-slider__item', 'b-slider__img')).animate({left:"+="+slider.dWidth+"px"}, 500, function () {
+            slider.container.css('left', 0).children().last().remove();
+        });
+
+        slider.imagesLoad();
+        slider.updateUrl(id);
+        slider.thumbCentring();
     },
 
     calcWidth: function() {
@@ -154,9 +167,7 @@ var slider = {
     },
 
     updateUrl: function(id) {
-        if(id) {
-            history.pushState( null, null, '?imgid='+id);
-        }
+        if(id) { history.pushState( null, null, '?imgid='+id); }
 
     },
 
