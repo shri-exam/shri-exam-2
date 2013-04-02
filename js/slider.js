@@ -1,11 +1,14 @@
 var slider = {
 
+    loadOnStart: 20,
     container: $('.b-slider'),
     dWidth: $(document).width(),
+    thumbsBgWrap: $('.b-thumbs__bg'),
     apiUrl: 'http://api-fotki.yandex.ru/api/users/aig1001/album/63684/photos/created/?format=json&callback=?',
 
     init: function() {
         slider.getData();
+        slider.binds();
     },
 
     image: function(src, alt, cls){
@@ -16,12 +19,22 @@ var slider = {
         });
     },
 
+    sliderItem: function (link, alt){
+        alt = alt || 'alt';
+        return $('<li />',{
+            class: 'b-slider__item',
+            css: ({
+                width: slider.dWidth
+            })
+        }).append(slider.image(link, alt, 'b-slider__img'));
+    },
+
     getData: function(){
         $.getJSON(slider.apiUrl, function (data) {
             slider.imagesData = data.entries;
 
             slider.takeFirstImage();
-            slider.imagesPreload(0, 20);
+            slider.imagesPreload(0, slider.loadOnStart);
             $('.b-thumbs__item').first().addClass('b-thumbs__item-selected');
         });
     },
@@ -47,9 +60,10 @@ var slider = {
     },
 
     takeFirstImage: function() {
-        var firstImgLink = slider.imagesData[0].img.L.href;
+        var link = slider.imagesData[0].img.L.href,
+            alt = slider.imagesData[0].title;
 
-        $('<li class="b-slider__item" style="width:'+slider.dWidth+'px;"><img class="b-slider__img" src="'+firstImgLink+'"/></li>').appendTo(slider.container);
+        slider.sliderItem(link, alt).appendTo(slider.container);
     },
 
     changeImg: function(direction, thumb) {
@@ -61,15 +75,6 @@ var slider = {
                 if(selectedThumb.index() < thumb.index()){
                     return 'next';
                 }else{ return 'prev';}
-            },
-            sliderItem = function (link, alt){
-                alt = alt || 'alt';
-                return $('<li />',{
-                    class: 'b-slider__item',
-                    css: ({
-                        width: slider.dWidth
-                    })
-                }).append(slider.image(link, alt, 'b-slider__img'));
             };
 
         thumb = thumb || undefined;
@@ -83,7 +88,7 @@ var slider = {
 
                 thumb.addClass('b-thumbs__item-selected').siblings().removeClass('b-thumbs__item-selected');
 
-                slider.container.append(sliderItem(imageLink, imageAlt)).animate({left: "-="+slider.dWidth+"px"}, 500, function () {
+                slider.container.append(slider.sliderItem(imageLink, imageAlt)).animate({left: "-="+slider.dWidth+"px"}, 500, function () {
                     slider.container.css('left', 0).children().first().remove();
                 });
             }else if (!thumb && !selectedThumb.is(':last-child')){
@@ -92,7 +97,7 @@ var slider = {
 
                 selectedThumb.removeClass('b-thumbs__item-selected').next().addClass('b-thumbs__item-selected');
 
-                slider.container.append(sliderItem(imageLink, imageAlt)).animate({left: "-="+slider.dWidth+"px"}, 500, function () {
+                slider.container.append(slider.sliderItem(imageLink, imageAlt)).animate({left: "-="+slider.dWidth+"px"}, 500, function () {
                     slider.container.css('left', 0).children().first().remove();
                 });
             }
@@ -104,7 +109,7 @@ var slider = {
 
                 thumb.addClass('b-thumbs__item-selected').siblings().removeClass('b-thumbs__item-selected');
 
-                slider.container.css('left', -slider.dWidth).prepend(sliderItem(imageLink, imageAlt)).animate({left:"+="+slider.dWidth+"px"}, 500, function () {
+                slider.container.css('left', -slider.dWidth).prepend(slider.sliderItem(imageLink, imageAlt)).animate({left:"+="+slider.dWidth+"px"}, 500, function () {
                     slider.container.css('left', 0).children().last().remove();
                 });
             }else if(!thumb && !selectedThumb.is(':first-child')) {
@@ -113,7 +118,7 @@ var slider = {
 
                 selectedThumb.removeClass('b-thumbs__item-selected').prev().addClass('b-thumbs__item-selected');
 
-                slider.container.css('left', -slider.dWidth).prepend(sliderItem(imageLink, imageAlt)).animate({left:"+="+slider.dWidth+"px"}, 500, function () {
+                slider.container.css('left', -slider.dWidth).prepend(slider.sliderItem(imageLink, imageAlt)).animate({left:"+="+slider.dWidth+"px"}, 500, function () {
                     slider.container.css('left', 0).children().last().remove();
                 });
             }
@@ -122,6 +127,7 @@ var slider = {
 
         slider.thumbCentring();
         slider.imagesPreload();
+        history.pushState( null, null, '/index.html?imgid=20' );
     },
 
     calcWidth: function() {
@@ -130,43 +136,40 @@ var slider = {
     },
 
     thumbCentring: function(){
-        var selectedLeft = $('.b-thumbs__item-selected').position().left,
-            thumbSlide = $('.b-thumbs__bg');
+        var selectedLeft = $('.b-thumbs__item-selected').position().left;
         if( selectedLeft > (slider.dWidth / 2) ){
             var calculated = selectedLeft - ((slider.dWidth - 190) / 2);
 
-            thumbSlide.animate({
+            slider.thumbsBgWrap.animate({
                 scrollLeft: calculated
             }, 500);
         }else {
-            thumbSlide.animate({
+            slider.thumbsBgWrap.animate({
                 scrollLeft: 0
             }, 500);
         }
+    },
+
+    binds: function() {
+
+        slider.thumbsBgWrap.mousewheel(function(event, delta) {
+            var val = this.scrollLeft - (delta * 30);
+            $(this).scrollLeft(val);
+            slider.imagesPreload();
+        });
+
+        $('.b-thumbs__wrap').hover(function() {
+            slider.thumbsBgWrap.toggleClass('b-thumbs__bg--up');
+        });
+
+        $(window).resize(function () {
+            slider.calcWidth();
+            slider.thumbCentring();
+        });
     }
 
 };
 
 $(window).load(function () {
     slider.init();
-});
-
-$(window).resize(function () {
-    slider.calcWidth();
-    slider.thumbCentring();
-});
-
-$(function () {
-
-    $('.b-thumbs__bg').on('mousewheel', function(event, delta) {
-        var val = this.scrollLeft - (delta * 30);
-        $(this).scrollLeft(val);
-        slider.imagesPreload();
-    });
-
-    $('.b-thumbs__wrap').mouseenter(function() {
-        $('.b-thumbs__bg').animate({bottom:"+=95px"}, 500);
-    }).mouseleave(function() {
-            $('.b-thumbs__bg').animate({bottom:"-=95px"}, 500);
-    });
 });

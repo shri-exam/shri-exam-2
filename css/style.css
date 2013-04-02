@@ -80,6 +80,20 @@ html, .b-page{height: 100%;}
     overflow: hidden;
     position: relative;
     background: rgba(0,0,0, 0.5);
+    -webkit-transition: bottom 0.4s linear;
+    -moz-transition: bottom 0.4s linear;
+    -o-transition: bottom 0.4s  linear;
+    -ms-transition: bottom 0.4s linear;
+    transition: bottom 0.4s linear;
+}
+
+.b-thumbs__bg--up{
+    bottom: 0;
+    -webkit-transition: bottom 0.4s 0.4s linear;
+    -moz-transition: bottom 0.4s 0.4s linear;
+    -o-transition: bottom 0.4s 0.4s linear;
+    -ms-transition: bottom 0.4s 0.4s linear;
+    transition: bottom 0.4s 0.4s linear;
 }
 
 .b-thumbs{
