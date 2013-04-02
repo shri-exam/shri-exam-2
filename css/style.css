@@ -113,6 +113,7 @@ html, .b-page{height: 100%;}
     list-style: none;
     vertical-align: top;
     display: inline-block;
+    background: url("../img/loader.gif") no-repeat 50% 50%;
 }
 
 .b-thumbs__item-selected{
